@@ -26,7 +26,7 @@
 ##############################################################################
 
 {
-    "name" : "l10n_mx_invoice_amount_to_text",
+    "name" : "FacturaE - Amount to text",
     "version" : "1.0",
     "author" : "Vauxoo",
     "category" : "Localization/Mexico",
