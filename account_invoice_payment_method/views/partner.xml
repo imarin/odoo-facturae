@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_partner_form_inh_xml22b">
+            <field name="name">view.partner.form.inh.xml22</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_payment_term_id" position="before">
+                    <field name="pay_method_id" colspan="2"/>
+                    <field name="acc_payment" colspan="2" domain="[('partner_id', '=', id)]" context="{'default_partner_id' : id }"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

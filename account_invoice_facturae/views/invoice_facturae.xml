@@ -1,0 +1,57 @@
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_res_company_form_inherit_certs">
+            <field name="name">view.account.invoice.form.inherit.facturae</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="model">account.invoice</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <button name="action_invoice_sent" position="after">
+                    <button name="genFacturae" type="object" groups="account.group_account_invoice" class="oe_highlight" string="Timbrar Factura"  confirm="¿Estás seguro de querer timbrar la factura?" attrs="{ 'invisible': ['|',('facturada', '=', True), ('state','!=','open')]}"/>
+                </button>
+                <xpath expr="//page[2]" position="after">
+                    <page name="facturae" string="Factura electrónica">
+                        <group string="XML">
+                            <div>
+                                <label for="factura_xml_download"/>
+                                <field name="factura_xml_download" filename="factura_xml_fname" />
+                            </div>
+                        </group>
+                        <group string="Variables de factura" groups="base.group_no_one" class="oe_inline">
+                            <field name="facturada" />
+                            <field name="factura_moneda" />
+                            <field name="factura_formapago" />
+                            <field name="factura_uuid" />
+                            <field name="factura_fecemi" />
+                            <field name="factura_sellosat" />
+                            <field name="factura_certificado" />
+                            <field name="factura_nocertificado" />
+                            <field name="factura_sello" />
+                            <field name="factura_cadena" />
+                            <field name="factura_qr_cadena" />
+                            <field name="factura_cadena_timbrada" />
+                            <field name="factura_version" />
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//button[@name='action_cancel_draft']" position="attributes">
+
+                    <attribute name="attrs">{'invisible': ['|',('facturada', '=', True)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_res_company_tree_inherit_showjournal" model="ir.ui.view">
+            <field name="name">view.account.invoice.tree.inherit.facturae</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

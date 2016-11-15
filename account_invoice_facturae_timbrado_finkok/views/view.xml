@@ -1,0 +1,41 @@
+<openerp>
+	<data>
+		<record id="parameters_finkok" model="ir.ui.view">
+			<field name="name">Parametros Finkok</field>
+			<field name="model">finkok.config.settings</field>
+			<field name="arch" type="xml">
+				<form string="Parametros Finkok" class="oe_form_configuration">
+					<header>
+						<button string="Save" type="object"
+							name="execute" class="oe_highlight"/>
+						or
+						<button string="Cancel" type="object"
+							name="cancel" class="oe_link"/>
+					</header>
+					<group string="Parametros Finkok">
+						<div>
+							<label for="finkok_username"/>
+							<field name="finkok_username"/>
+						</div>
+						<div>
+							<label for="finkok_password"/>
+							<field name="finkok_password" password="True"/>
+						</div>
+						<div>
+							<label for="finkok_url"/>
+							<field name="finkok_url"/>
+						</div>
+					</group>
+				</form>
+			</field>
+		</record>
+		<record id="imss_parameters_action" model="ir.actions.act_window">
+			<field name="name">Parametros Finkok</field>
+			<field name="res_model">finkok.config.settings</field>
+			<field name="view_id" ref="parameters_finkok"/>
+			<field name="view_mode">form</field>
+			<field name="target">inline</field>
+		</record>
+		<menuitem id="account_invoice_facturae_finkok_settings" name="Credenciales Finkok" parent="account.menu_finance_configuration" sequence="1" groups="account.group_account_manager" action="imss_parameters_action" />
+	</data>
+</openerp>

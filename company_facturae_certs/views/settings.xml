@@ -1,0 +1,41 @@
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_res_company_form_inherit_certs">
+            <field name="name">view.res.company.form.inherit.certs</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/notebook/page[@name='configuration']" position="after">
+                    <page string="Certificados">
+                        <group string="Archivos CER y KEY">
+                            <div>
+                                <label for="achivo_cer"/>
+                                <field name="achivo_cer" domain="[('res_model', '=', 'res.company'),('res_id','=',id), ('mimetype','=','chemical/x-cerius')]"/>
+                            </div>
+                            <div>
+                                <label for="achivo_key"/>
+                                <field name="achivo_key" domain="[('res_model', '=', 'res.company'),('res_id','=',id), ('mimetype','=','application/pgp-keys')]"/>
+                            </div>
+                            <div colspan="2">
+                                <label for="cer_password"/>
+                                <field name="cer_password" password="True"/>
+                            </div>
+                            <div>
+                                <label for="numero_certificado"/>
+                                <field name="numero_certificado"/>
+                            </div>
+                            <button name="generateNumCER" type="object" class="btn btn-sm btn-primary" string="Obtener serie del certificado" attrs="{'invisible': [('achivo_cer', '=', False)]}"/>
+                        </group>
+                        <group string="Archivo PEM ( Generado a partir del CER y KEY )">
+                            <div>
+                                <label for="achivo_pem"/>
+                                <field name="achivo_pem" domain="[('res_model', '=', 'res.company'),('res_id','=',id), ('mimetype','=','application/octet-stream')]"/>
+                            </div>
+                            <button name="generatePEM" type="object" class="btn btn-sm btn-primary" string="Generar PEM" attrs="{'invisible': ['|',('achivo_cer', '=', False),'|',('achivo_key', '=', False),('cer_password', '=', False)]}"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

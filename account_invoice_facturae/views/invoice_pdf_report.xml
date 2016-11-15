@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report id="account_invoices_facturae"
+            model="account.invoice"
+            string="Factura Electronica"
+            report_type="qweb-pdf"
+            attachment_use="True"
+            attachment="object.company_id.vat[2:5] + '%010d.pdf' % (int(object.number.split('-')[1]),)"
+            name="account.report_invoice_facturae"
+            file="account.report_invoice_facturae" />
+    </data>
+
+    <template id="account.report_invoice_facturae_header" inherit_id="report.external_layout_header"> <!--  primary="True" -->
+        <xpath expr="//div[@class='header']" position="replace">
+            <div class="header">
+                <style>
+                    p {
+                        margin-bottom: 5px;
+                    }
+                    hr {
+                        margin-top: 5px;
+                        margin-bottom: 5px;
+                        padding-bottom: 0px;
+                    }
+                </style>
+                <div class="row uppercase" style="font-size: 11px;">
+                    <div class="col-xs-3">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 75px; padding-left: 20px;"/>
+                    </div>
+                    <div class="col-xs-9" name="company_address">
+                        <!-- <div t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;vat&quot;,&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid #457DA3;"/> -->
+                        <p style="margin: 0 0 2px;">
+                            <b>RFC: 
+                                <span t-esc="company.vat[2:]"></span>, 
+                                <span t-field="company.name"></span>
+                            </b>
+                        </p>
+                        <p style="margin: 0 0 2px;">
+                            <span t-field="company.street"></span> 
+                            <span t-field="company.l10n_mx_street3"></span> 
+                            <span t-field="company.l10n_mx_street4"></span>, 
+                            COL: <span t-field="company.street2"></span>, 
+                            <span t-field="company.city"></span>, 
+                            <span t-field="company.state_id"></span>, 
+                            <span t-field="company.country_id"></span>, 
+                            CP: <span t-field="company.zip"></span>, 
+                            EMAIL: <span t-field="company.email"></span>
+                        </p>
+                        <!-- <p style="margin: 0 0 2px;">
+                            CP: <span t-field="company.zip"></span>, 
+                            EMAIL: <span t-field="company.email"></span>
+                        </p> -->
+
+                        <p style="margin: 0 0 2px;">
+                            REGIMEN FISCAL: <span  t-field="company.partner_id.regimen_fiscal_id"></span>
+                        </p>
+                        <p style="margin: 0 0 2px;">
+                            LUGAR DE EXPEDICION: <span  t-field="company.city"></span>
+                        </p>
+                        
+                    </div>                   
+                </div>
+                <hr/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="account.report_invoice_facturae">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page" style="font-size: 11px;">
+                        <style>
+                            p {
+                                margin-bottom: 5px;
+                            }
+                            hr {
+                                margin-top: 5px;
+                                margin-bottom: 5px;
+                                padding-bottom: 0px;
+                            }
+                        </style>
+                        <div class="row">
+                            <div class="col-xs-4" style="padding-right:0px;" >
+                                <p><b><span t-field="o.partner_id"/></b></p>
+                                <p><b>RFC: <span t-field="o.partner_id.vat" /></b></p>
+                                <p> <span t-field="o.partner_id.street"/> <span t-field="o.partner_id.l10n_mx_street3"/> <span t-field="o.partner_id.l10n_mx_street4"/>, COL: <span t-field="o.partner_id.street2"/></p>
+                                <p> <span t-field="o.partner_id.city"/>, <span t-field="o.partner_id.state_id"/>, <span t-field="o.partner_id.country_id"/></p>
+                            </div>
+                            <div class="col-xs-4" style="padding-left:0px; padding-right:0px;">
+                                <p>
+                                    Serie-Folio: <strong><span  t-field="o.number"></span></strong>
+                                </p>
+                                 <p>
+                                    Efecto CFDI: <strong><span>INGRESO</span></strong>
+                                </p>
+                                 <p>
+                                    No. Certificado CSD: <strong><span t-field="o.factura_nocertificado"></span></strong>
+                                </p>
+                                 <p>
+                                    Tipo Comprobante: <strong><span>FACTURA</span></strong>
+                                </p>
+                                <p>
+                                    Fecha-Hora Emision: <strong><span t-field="o.factura_fecemi"></span></strong>
+                                </p>
+                            </div>
+                            <div class="col-xs-4" style="padding-left:0px;">
+                                <p>
+                                    Método de pago: <strong><span t-field="o.partner_id.pay_method_id.code"></span></strong>
+                                </p>
+                                 <p>
+                                    Moneda: <strong><span t-field="o.factura_moneda"></span></strong>
+                                </p>
+                                 <p>
+                                    No. Cta. Pago: <strong><span t-field="o.partner_id.acc_payment"></span></strong>
+                                </p>
+                                 <p>
+                                    Forma de pago: <br/><strong><span t-field="o.factura_formapago"></span></strong>
+                                </p>
+                            </div>
+                        </div>
+                        <hr/>
+                        <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+                        <!-- partidas -->
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Descripcion</th>
+                                    <th class="text-right">Cantidad</th>
+                                    <th class="text-right">Precio Unitario</th>
+                                    <th class="text-right">Importe</th>
+                                </tr>
+                            </thead>
+                            <tbody class="invoice_tbody">
+                                <tr t-foreach="o.invoice_line_ids" t-as="l">
+                                    <td><span t-field="l.name"/></td>
+                                    <td class="text-right">
+                                        <span t-field="l.quantity"/>
+                                        <span t-field="l.uom_id"  groups="product.group_uom"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="l.price_unit"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="l.price_subtotal" 
+                                            t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- end partidas -->
+                        <!-- Totales -->
+                        <div class="row">
+                            <div class="col-xs-8" style="margin-top: 44px;">
+                                 <strong>Total con letra: <br/>(<span t-field="o.amount_to_text"/>)</strong>
+                            </div>
+                            <div class="col-xs-4">
+                                <table class="table table-condensed" style="margin-bottom:0px;">
+                                    <tr class="border-black">
+                                        <td><strong>Subtotal</strong></td>
+                                        <td class="text-right">
+                                            <strong><span t-field="o.amount_untaxed" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></strong>
+                                        </td>
+                                    </tr>
+                                    <t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
+                                        <tr>
+                                            <td><strong>IVA 16.00%</strong></td>
+                                            <td class="text-right">
+                                                <strong><span t-esc="amount_by_group[1]"/></strong>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr class="border-black">
+                                        <td><strong>Total</strong></td>
+                                        <td class="text-right">
+                                             <strong><span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div style="font-size: 9px;">
+                            <div class="row ">
+                                <div class="col-xs-12">
+                                    <p><strong>CADENA ORIGINAL:</strong></p>
+                                    <p t-field="o.factura_cadena"></p>
+                                    <p><strong>SELLO DIGITAL DEL CFDI:</strong></p>
+                                    <p t-field="o.factura_sello"></p>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-xs-3" style="padding-left:0px; padding-right: 0px;">
+                                    <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('QR', o.factura_qr_cadena, 300, 300)" style="width:155px;height:155px;"/>
+                                </div>
+                                <div class="col-xs-9" style="padding-left:0px; padding-right: 0px; margin-left: -4%; width: 79%;">
+                                    <hr/>
+                                    <p>
+                                        <strong>VERSION:</strong> <span t-field="o.factura_version"/>
+                                    </p>    
+                                        
+                                    
+                                    <p>
+                                        <strong>FOLIO FISCAL-UUID:</strong> <span t-field="o.factura_uuid"/>
+                                    </p>
+                                        
+                                    <p>
+                                        <strong>FECHA TIMBRADO: </strong><span t-field="o.factura_fecemi"/>
+                                    </p>
+                                    <p>
+                                        <strong>NO. CERTIFICACION:</strong> <span t-field="o.factura_certificado"/>
+                                    </p>   
+                                    <p><strong>SELLO SAT:</strong> <span t-field="o.factura_sellosat" style="word-break: break-all;"/></p>
+                                    <p><strong>CADENA ORIGINAL DEL TIMBRE FISCAL DIGITAL DEL SAT:</strong> <span t-field="o.factura_cadena_timbrada" style="word-break: break-all;"/></p>
+                                </div>
+                            </div>
+                        <!-- end certificados del sat -->
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="account.report_invoice_facturae_footer" inherit_id="report.external_layout_footer">
+        <xpath expr="//div[@class='footer']" position="replace">
+            <div class="footer">
+                <div class="text-center" style="border-top: 1px solid black; font-size: 10px;">
+                    <ul t-if="not company.custom_footer" class="list-inline">
+                        <li>ESTE DOCUMENTO ES UNA REPRESENTACION IMPRESA DE UN CFDI</li>
+                    </ul>
+
+                    <ul t-if="not company.custom_footer" class="list-inline" name="financial_infos">
+                       
+                    </ul>
+
+                    <t t-if="company.custom_footer">
+                       
+                    </t>
+
+                    <ul class="list-inline">
+                        <li>Page:</li>
+                        <li><span class="page"/></li>
+                        <li>/</li>
+                        <li><span class="topage"/></li>
+                    </ul>
+                    
+                </div>
+            </div>
+                 
+        </xpath>
+    </template>
+
+
+<!-- 
+    <?xml version="1.0"?>
+    <t t-name="report.external_layout_header">
+        <div class="header">
+            <div class="row">
+                <div class="col-xs-3">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;"/>
+                </div>
+                <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1"/>
+            </div>
+            <div class="row zero_min_height">
+                <div class="col-xs-12">
+                    <div style="border-bottom: 1px solid #457DA3;"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" name="company_address">
+                    <div t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid #457DA3;"/>
+                </div>
+            </div>
+        </div>
+    </t> -->
+</openerp>
+
+<!-- 
+file="account.report_invoice_facturae"
+attachment_use="True"
+attachment="(object.state in ('open','paid')) and
+    ('INV'+(object.number or '').replace('/','')+'.pdf')"
+ -->
