@@ -120,7 +120,7 @@ class account_invoice(models.Model):
 
 		moneda = "PESO MXN"
 
-		if(invoice.currency_id.name is "USD"):
+		if invoice.currency_id.name == "USD":
 			moneda = "DOLAR USD"
 			root.set("TipoCambio", 1 / invoice.currency_id.rate)
 
