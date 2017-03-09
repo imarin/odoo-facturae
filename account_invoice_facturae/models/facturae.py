@@ -117,11 +117,15 @@ class account_invoice(models.Model):
 		root.set("serie", serie_folio[0])
 		root.set("folio", serie_folio[1])
 		root.set("formaDePago", "PAGO EN UNA SOLA EXHIBICION")
+
+		moneda = "PESO MXN"
+
 		if(invoice.currency_id.name is "USD")
-			root.set("Moneda", "DOLAR USD")
+			moneda = "DOLAR USD"
 			root.set("TipoCambio", 1 / invoice.currency_id.rate)
-		else
-			root.set("Moneda", "PESO MXN")
+
+		root.set("Moneda", moneda)
+
 		root.set("tipoDeComprobante", "ingreso")
 
 		try:
@@ -263,7 +267,7 @@ class account_invoice(models.Model):
 		values = {
 			'facturada': True,
 			'factura_xml': factura_xml.id,
-			'factura_moneda' : 'PESO MXN',
+			'factura_moneda' : moneda,
 			'factura_formapago' : 'PAGO EN UNA SOLA EXHIBICION',
 			'factura_uuid' : UUID,
 			'factura_fecemi' : fecha,
