@@ -122,7 +122,7 @@ class account_invoice(models.Model):
 
 		if invoice.currency_id.name == "USD":
 			moneda = "DOLAR USD"
-			root.set("TipoCambio", 1 / invoice.currency_id.rate)
+			root.set("TipoCambio", "%.2f" % (1 / invoice.currency_id.rate))
 
 		root.set("Moneda", moneda)
 
