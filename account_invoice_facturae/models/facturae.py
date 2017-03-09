@@ -117,7 +117,11 @@ class account_invoice(models.Model):
 		root.set("serie", serie_folio[0])
 		root.set("folio", serie_folio[1])
 		root.set("formaDePago", "PAGO EN UNA SOLA EXHIBICION")
-		root.set("Moneda", "PESO MXN")
+		if(invoice.currency_id.name is "USD")
+			root.set("Moneda", "DOLAR USD")
+			root.set("TipoCambio", 1 / invoice.currency_id.rate)
+		else
+			root.set("Moneda", "PESO MXN")
 		root.set("tipoDeComprobante", "ingreso")
 
 		try:
