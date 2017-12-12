@@ -7,4 +7,5 @@ class res_company(models.Model):
 	diverza_url_emision = fields.Char(string="URL de emisión")
 	diverza_url_emision_completa = fields.Char(string="URL de emisión completa")
 	diverza_url_cancelacion = fields.Char(string="URL de cancelación")
+	diverza_id = fields.Char(string="Id")
 	diverza_token = fields.Char(string="Token")

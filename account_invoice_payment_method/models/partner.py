@@ -29,5 +29,6 @@ from openerp import models, fields
 class res_partner(models.Model):
     _inherit = 'res.partner'
 
-    pay_method_id = fields.Many2one('l10n_mx.pay.method', string='Payment Method', help="Método de pago por defecto del cliente")
-    acc_payment = fields.Many2one('res.partner.bank', string='Default Account Number', help="Cuenta de pago por defecto del cliente")
+    pay_method_id = fields.Many2one('l10n_mx.pay.method', string='Forma Pago', help="Forma de pago por defecto del cliente")
+    pay_metodopago_id = fields.Many2one('l10n_mx.pay.metodopago', string='Metodo Pago', help="Metodo de pago por defecto del cliente")
+

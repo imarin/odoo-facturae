@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="product_claveprod_01010101" model="l10n_mx.product.claveprodserv">
+            <field name="code">01010101</field>
+            <field name="name">No existe en el catálogo</field>
+        </record>
+    </data>
+</openerp>

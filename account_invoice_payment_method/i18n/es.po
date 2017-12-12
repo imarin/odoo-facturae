@@ -38,11 +38,6 @@ msgid "Description"
 msgstr "Descripción"
 
 #. module: l10n_mx_payment_method
-#: field:account.invoice,acc_payment:0
-msgid "Account Number"
-msgstr "Número de Cuenta"
-
-#. module: l10n_mx_payment_method
 #: help:account.invoice,pay_method_id:0
 msgid ""
 "Indicates the way it was paid or will be paid the invoice,                "
@@ -67,16 +62,6 @@ msgstr ""
 "podrían ser: cheque, transferencia bancaria, depósito en cuenta bancaria, "
 "tarjeta de crédito, dinero en efectivo, etc Si no sabe como se paga la "
 "factura, deje vacía y el XML muestra \"no identificada\"."
-
-#. module: l10n_mx_payment_method
-#: help:account.invoice,acc_payment:0
-msgid ""
-"Is the account with which the client pays the invoice,                 if "
-"not know which account will used for pay leave empty and                 the "
-"XML will show \"“Unidentified”\"."
-msgstr ""
-"Es la cuenta con la que el cliente paga la factura, si no sabe qué cuenta se "
-"utiliza para pagar dejar vacía y el XML mostrará \"\" no identificado \".\""
 
 #. module: l10n_mx_payment_method
 #: model:ir.model,name:l10n_mx_payment_method.model_account_invoice

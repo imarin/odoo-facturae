@@ -8,6 +8,7 @@ class DiverzaConfigSettings(models.TransientModel):
 	diverza_url_emision = fields.Char(string="URL de emisión")
 	diverza_url_emision_completa = fields.Char(string="URL de emisión completa")
 	diverza_url_cancelacion = fields.Char(string="URL de cancelación")
+	diverza_id = fields.Char(string="ID")
 	diverza_token = fields.Char(string="Token")
 
 
@@ -18,6 +19,7 @@ class DiverzaConfigSettings(models.TransientModel):
 			'diverza_url_emision' : company.diverza_url_emision,
 			'diverza_url_emision_completa' : company.diverza_url_emision_completa,
 			'diverza_url_cancelacion' : company.diverza_url_cancelacion,
+			'diverza_id' : company.diverza_id,
 			'diverza_token' : company.diverza_token
 		}
 
@@ -27,4 +29,5 @@ class DiverzaConfigSettings(models.TransientModel):
 		company.diverza_url_emision = self.diverza_url_emision
 		company.diverza_url_emision_completa = self.diverza_url_emision_completa
 		company.diverza_url_cancelacion = self.diverza_url_cancelacion
+		company.diverza_id = self.diverza_id
 		company.diverza_token = self.diverza_token

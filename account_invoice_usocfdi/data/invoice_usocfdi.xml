@@ -1,0 +1,179 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="invoice_usocfdi_G01" model="l10n_mx.invoice.usocfdi">
+            <field name="code">G01</field>
+            <field name="name">Adquisición de mercancias</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_G02" model="l10n_mx.invoice.usocfdi">
+            <field name="code">G02</field>
+            <field name="name">Devoluciones, descuentos o bonificaciones</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_G03" model="l10n_mx.invoice.usocfdi">
+            <field name="code">G03</field>
+            <field name="name">Gastos en general</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_I01" model="l10n_mx.invoice.usocfdi">
+            <field name="code">I01</field>
+            <field name="name">Construcciones</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_I02" model="l10n_mx.invoice.usocfdi">
+            <field name="code">I02</field>
+            <field name="name">Mobilario y equipo de oficina por inversiones</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_I03" model="l10n_mx.invoice.usocfdi">
+            <field name="code">I03</field>
+            <field name="name">Equipo de transporte</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_I04" model="l10n_mx.invoice.usocfdi">
+            <field name="code">I04</field>
+            <field name="name">Equipo de computo y accesorios</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_I05" model="l10n_mx.invoice.usocfdi">
+            <field name="code">I05</field>
+            <field name="name">Dados, troqueles, moldes, matrices y herramental</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_I06" model="l10n_mx.invoice.usocfdi">
+            <field name="code">I06</field>
+            <field name="name">Comunicaciones telefónicas</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_I07" model="l10n_mx.invoice.usocfdi">
+            <field name="code">I07</field>
+            <field name="name">Comunicaciones satelitales</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_I08" model="l10n_mx.invoice.usocfdi">
+            <field name="code">I08</field>
+            <field name="name">Otra maquinaria y equipo</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D01" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D01</field>
+            <field name="name">Honorarios médicos, dentales y gastos hospitalarios.</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D02" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D02</field>
+            <field name="name">Gastos médicos por incapacidad o discapacidad</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D03" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D03</field>
+            <field name="name">Gastos funerales.</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D04" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D04</field>
+            <field name="name">Donativos.</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D05" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D05</field>
+            <field name="name">Intereses reales efectivamente pagados por créditos hipotecarios (casa habitación).</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D06" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D06</field>
+            <field name="name">Aportaciones voluntarias al SAR.</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D07" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D07</field>
+            <field name="name">Primas por seguros de gastos médicos.</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D08" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D08</field>
+            <field name="name">Gastos de transportación escolar obligatoria.</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D09" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D09</field>
+            <field name="name">Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones.</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_D10" model="l10n_mx.invoice.usocfdi">
+            <field name="code">D10</field>
+            <field name="name">Pagos por servicios educativos (colegiaturas)</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="0"/>
+        </record>
+    </data>
+    <data>
+        <record id="invoice_usocfdi_P01" model="l10n_mx.invoice.usocfdi">
+            <field name="code">P01</field>
+            <field name="name">Por definir</field>
+            <field name="aplica_fisica" eval="1"/>
+            <field name="aplica_moral" eval="1"/>
+        </record>
+    </data>
+</openerp>

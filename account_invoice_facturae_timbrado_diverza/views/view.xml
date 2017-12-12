@@ -14,6 +14,10 @@
 					</header>
 					<group string="Parametros Diverza">
 						<div>
+							<label for="diverza_id"/>
+							<field name="diverza_id"/>
+						</div>
+						<div>
 							<label for="diverza_token"/>
 							<field name="diverza_token"/>
 						</div>

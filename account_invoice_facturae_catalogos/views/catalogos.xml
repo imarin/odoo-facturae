@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem 
+            id="account_invoice_facturae_catalogos_menu" 
+            name="Catálogos CFDI" 
+            parent="account.menu_finance_configuration" 
+            sequence="2"  />
+    </data>
+</openerp>

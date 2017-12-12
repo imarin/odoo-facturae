@@ -28,6 +28,7 @@ class account_invoice(models.Model):
 	factura_uuid = fields.Char(string="UUID", readonly=True)
 	factura_fecemi = fields.Char(string="Fecha de emision", readonly=True)
 	factura_sellosat = fields.Char(string="Sello Sat", readonly=True)
+	factura_rfcpac = fields.Char(string="RFC PAC", readonly=True)
 	factura_certificado = fields.Char(string="Certificado Sat", readonly=True)
 	factura_nocertificado = fields.Char(string="Certificado", readonly=True)
 	factura_sello = fields.Char(string="Sello", readonly=True)
@@ -36,7 +37,7 @@ class account_invoice(models.Model):
 	factura_cadena_timbrada = fields.Char(string="Cadena timbrada", readonly=True)
 	factura_version = fields.Char(string="Versión", readonly=True)
 
-	def timbrar(self, xml_base64):
+	def timbrar(self, xml_base64, refid):
 		raise UserError("No hay ningún módulo de PAC instalado")
 
 	def cancelar_timbre(self, xml_base64):
@@ -48,25 +49,21 @@ class account_invoice(models.Model):
 		cert = base64.b64encode(cert_file.read())
 		xdoc = ET.fromstring(cfdi)
 
-		xdoc.attrib['fecha'] = str(now.isoformat())[:19]
-		_logger.info("sello")
-		_logger.info(xdoc.attrib['fecha'])
+		xdoc.attrib['Fecha'] = str(now.isoformat())[:19]
 
-		cadena_original = self.get_cadena(xdoc, 'cadenaoriginal_3_2.xslt')
-
-		digest = hashlib.new('sha1', str(cadena_original)).digest()
-		sello = base64.b64encode(keys.sign(digest, "sha1"))
 		comp = xdoc.get('Comprobante')
-		
-		# _logger.info(sello)
-		# _logger.info(cert)
+		xdoc.attrib['Certificado'] = cert
+		xdoc.attrib['NoCertificado'] = numero_certificado
 
-		xdoc.attrib['sello'] = sello
-		xdoc.attrib['noCertificado'] = numero_certificado
-		xdoc.attrib['certificado'] = cert
+		cadena_original = self.get_cadena(xdoc, 'cadenaoriginal_3_3.xslt')
 
-		#return ET.tostring(xdoc)
-		
+		digest = hashlib.new('sha256', str(cadena_original)).digest()
+		sello = base64.b64encode(keys.sign(digest, "sha256"))
+
+		comp = xdoc.get('Comprobante')
+		xdoc.attrib['Sello'] = sello
+
+		# print ET.tostring(xdoc)
 		return ET.tostring(xdoc),numero_certificado,sello,cadena_original
 
 	def extract_timbre_info(self, xml_string):
@@ -111,116 +108,128 @@ class account_invoice(models.Model):
 		}
 
 		root = ET.Element('{%s}Comprobante' % namespaces['cfdi'], nsmap=namespaces)
-		root.set("{%s}schemaLocation" % namespaces['xsi'], "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd")
-		root.set("version", "3.2")
+		root.set("{%s}schemaLocation" % namespaces['xsi'], "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd")
+		root.set("Version", "3.3")
 		serie_folio = invoice.number.split("-")
-		root.set("serie", serie_folio[0])
-		root.set("folio", serie_folio[1])
-		root.set("formaDePago", "PAGO EN UNA SOLA EXHIBICION")
+		root.set("Serie", serie_folio[0])
+		root.set("Folio", serie_folio[1])
 
-		moneda = "PESO MXN"
+		try:
+			pay_method_id = invoice.pay_method_id.code
+			pay_metodopago_id = invoice.pay_metodopago_id.code
+		except TypeError:
+			raise UserError("Error en forma de pago, método de pago o cuenta de pago")
+
+		root.set("FormaPago", pay_method_id)
+		root.set("MetodoPago", pay_metodopago_id)
+
+		moneda = "MXN"
 
 		if invoice.currency_id.name == "USD":
-			moneda = "DOLAR USD"
+			moneda = "USD"
 			root.set("TipoCambio", "%.2f" % (1 / invoice.currency_id.rate))
 
 		root.set("Moneda", moneda)
 
-		root.set("tipoDeComprobante", "ingreso")
+		root.set("TipoDeComprobante", "I")
 
 		try:
-			pay_method_id = invoice.pay_method_id.code
-			cta_pago = invoice.acc_payment.acc_number[-4:]
-		except TypeError:
-			raise UserError("Error en método de pago o cuenta de pago")
-
-		root.set("metodoDePago", pay_method_id)
-		try:
-			root.set("LugarExpedicion", invoice.company_id.city)
+			root.set("LugarExpedicion", invoice.company_id.zip)
 		except TypeError:
 			raise UserError("Error en dirección de la compañía que esta facturando")
 
-		root.set("NumCtaPago", cta_pago)
+		# root.set("NumCtaPago", cta_pago)
 		try:
-			root.set("condicionesDePago", invoice.payment_term_id.name)
-			root.set("subTotal", unicode(invoice.amount_untaxed))
-			root.set("total", unicode(invoice.amount_total))
+			root.set("CondicionesDePago", invoice.payment_term_id.name)
+			root.set("SubTotal", unicode(invoice.amount_untaxed))
+			root.set("Total", unicode(invoice.amount_total))
 		except TypeError:
 			raise UserError("Condiciones de pago no asignado en la factura")
 
 		emisor = ET.SubElement(root, '{%s}Emisor' % namespaces['cfdi'])
 		
 		try:
-			emisor.set("rfc", invoice.company_id.vat[2:])
-			emisor.set("nombre", invoice.company_id.name)
+			emisor.set("Rfc", invoice.company_id.vat[2:])
+			emisor.set("Nombre", invoice.company_id.name)
 			qr_string += '?re=%s' % invoice.company_id.vat[2:15]
 		except TypeError:
 			raise UserError("RFC no asignado en la compañía que esta facturando")
 
-		emisor_df = ET.SubElement(emisor, '{%s}DomicilioFiscal' % namespaces['cfdi'])
-		try:
-			emisor_df.set("calle", invoice.company_id.street) 
-			emisor_df.set("noExterior", invoice.company_id.l10n_mx_street3) 
-			emisor_df.set("noInterior", invoice.company_id.l10n_mx_street4) 
-			emisor_df.set("colonia", invoice.company_id.street2) 
-			emisor_df.set("municipio", invoice.company_id.city) 
-			emisor_df.set("estado", invoice.company_id.state_id.name) 
-			emisor_df.set("pais", invoice.company_id.country_id.name) 
-			emisor_df.set("codigoPostal", invoice.company_id.zip)
-		except TypeError:
-			raise UserError("Error en el domicilio de la compañía que esta facturando")
+		# emisor_df = ET.SubElement(emisor, '{%s}DomicilioFiscal' % namespaces['cfdi'])
+		# try:
+		# 	emisor_df.set("calle", invoice.company_id.street) 
+		# 	emisor_df.set("noExterior", invoice.company_id.l10n_mx_street3) 
+		# 	emisor_df.set("noInterior", invoice.company_id.l10n_mx_street4) 
+		# 	emisor_df.set("colonia", invoice.company_id.street2) 
+		# 	emisor_df.set("municipio", invoice.company_id.city) 
+		# 	emisor_df.set("estado", invoice.company_id.state_id.name) 
+		# 	emisor_df.set("pais", invoice.company_id.country_id.name) 
+		# 	emisor_df.set("codigoPostal", invoice.company_id.zip)
+		# except TypeError:
+		# 	raise UserError("Error en el domicilio de la compañía que esta facturando")
 
-		emisor_rf = ET.SubElement(emisor, '{%s}RegimenFiscal' % namespaces['cfdi'])
+		# emisor_rf = ET.SubElement(emisor, '{%s}RegimenFiscal' % namespaces['cfdi'])
 		try:
-			emisor_rf.set("Regimen", invoice.company_id.partner_id.regimen_fiscal_id.name)
+			emisor.set("RegimenFiscal", invoice.company_id.partner_id.regimen_fiscal_id.code)
+			# emisor_rf.set("Regimen", invoice.company_id.partner_id.regimen_fiscal_id.name)
 		except:
 			raise UserError("Error en el régimen de la compañía que esta facturando")
 
 		receptor = ET.SubElement(root, '{%s}Receptor' % namespaces['cfdi'])
 		try:
-			receptor.set("rfc", invoice.partner_id.vat[2:])
-			receptor.set("nombre", invoice.partner_id.name)
+			receptor.set("Rfc", invoice.partner_id.vat[2:])
+			receptor.set("Nombre", invoice.partner_id.name)
 			qr_string += '&rr=%s' % invoice.partner_id.vat[2:15]
 		except TypeError:
 			raise UserError("RFC no asignado en la compañía a la que esta facturando")
 
-		receptor_d = ET.SubElement(receptor, '{%s}Domicilio' % namespaces['cfdi'])
-		try:
-			receptor_d.set("calle", invoice.partner_id.street) 
-			receptor_d.set("noExterior", invoice.partner_id.l10n_mx_street3)
-			if invoice.partner_id.l10n_mx_street4:
-				receptor_d.set("noInterior", invoice.partner_id.l10n_mx_street4)
-			receptor_d.set("colonia", invoice.partner_id.street2) 
-			receptor_d.set("municipio", invoice.partner_id.city) 
-			receptor_d.set("estado", invoice.partner_id.state_id.name) 
-			receptor_d.set("pais", invoice.partner_id.country_id.name) 
-			receptor_d.set("codigoPostal", invoice.partner_id.zip)
-		except TypeError:
-			raise UserError("Error en el domicilio de la compañía a la que esta facturando")
+		receptor.set("UsoCFDI", invoice.invoice_usocfdi_id.code)
+		# receptor_d = ET.SubElement(receptor, '{%s}Domicilio' % namespaces['cfdi'])
+		# try:
+		# 	receptor_d.set("calle", invoice.partner_id.street) 
+		# 	receptor_d.set("noExterior", invoice.partner_id.l10n_mx_street3)
+		# 	if invoice.partner_id.l10n_mx_street4:
+		# 		receptor_d.set("noInterior", invoice.partner_id.l10n_mx_street4)
+		# 	receptor_d.set("colonia", invoice.partner_id.street2) 
+		# 	receptor_d.set("municipio", invoice.partner_id.city) 
+		# 	receptor_d.set("estado", invoice.partner_id.state_id.name) 
+		# 	receptor_d.set("pais", invoice.partner_id.country_id.name) 
+		# 	receptor_d.set("codigoPostal", invoice.partner_id.zip)
+		# except TypeError:
+		# 	raise UserError("Error en el domicilio de la compañía a la que esta facturando")
 		
 		conceptos = ET.SubElement(root, '{%s}Conceptos' % namespaces['cfdi'])
 
 		for invoice_line in invoice.invoice_line_ids:
 			concepto = ET.SubElement(conceptos, '{%s}Concepto' % namespaces['cfdi'])
+			concepto.set("ClaveProdServ", invoice_line.product_id.claveprodserv_id.code)
+			concepto.set("NoIdentificacion", str(invoice_line.product_id.id))
+			concepto.set("Cantidad", "{:.2f}".format(invoice_line.quantity))
+			concepto.set("ClaveUnidad", invoice_line.product_id.claveunidad_id.code)
+			concepto.set("Unidad", invoice_line.product_id.claveunidad_id.name)
+			concepto.set("Descripcion", invoice_line.name)
+			concepto.set("ValorUnitario", "{:.2f}".format(invoice_line.price_unit))
+			concepto.set("Importe", "{:.2f}".format(invoice_line.price_subtotal))
 
-			concepto.set("cantidad", "{:.2f}".format(invoice_line.quantity))
-			concepto.set("descripcion", invoice_line.name)
-			concepto.set("importe", "{:.2f}".format(invoice_line.price_subtotal))
-			concepto.set("noIdentificacion", str(invoice_line.product_id.id))
-			concepto.set("unidad", invoice_line.uom_id.name)
-			concepto.set("valorUnitario", "{:.2f}".format(invoice_line.price_unit))
+			impuestos = ET.SubElement(concepto, '{%s}Impuestos' % namespaces['cfdi'])
+			traslados = ET.SubElement(impuestos, '{%s}Traslados' % namespaces['cfdi'])
+			traslado = ET.SubElement(traslados, '{%s}Traslado' % namespaces['cfdi'])
+			traslado.set("Base", "{:.2f}".format(invoice_line.price_subtotal))
+			traslado.set("Impuesto", "002")
+			traslado.set("TipoFactor", "Tasa")
+			traslado.set("TasaOCuota", "0.160000")
+			traslado.set("Importe", "{:.2f}".format(invoice_line.price_subtotal*.16))
 
 		impuestos = ET.SubElement(root, '{%s}Impuestos' % namespaces['cfdi'])
-		impuestos.set("totalImpuestosTrasladados", "{:.2f}".format(invoice.amount_tax))
+		impuestos.set("TotalImpuestosTrasladados", "{:.2f}".format(invoice.amount_tax))
 
 		traslados = ET.SubElement(impuestos, '{%s}Traslados' % namespaces['cfdi'])
 		for tax_line in invoice.tax_line_ids:
 			traslado = ET.SubElement(traslados, '{%s}Traslado' % namespaces['cfdi'])
-
-			traslado.set("impuesto", tax_line.tax_id.description)
-			traslado.set("tasa", "{:.2f}".format(tax_line.tax_id.amount))
-			traslado.set("importe", "{:.2f}".format(tax_line.amount))
-
+			traslado.set("Impuesto", "002")
+			traslado.set("TipoFactor", "Tasa")
+			traslado.set("TasaOCuota", "0.160000")
+			traslado.set("Importe", "{:.2f}".format(tax_line.amount))
 
 		xml_sin_sellar = ET.tostring(root)
 
@@ -229,11 +238,11 @@ class account_invoice(models.Model):
 		# Se agregan mas variables, para recibir valores que regresa la funcion
 		xml_sellado,no_certificado,sello_sella,cadena = self.sella_xml(xml_sin_sellar, invoice.company_id.numero_certificado, archivo_cer_path, archivo_pem_path, now)
 		xml_sellado = '<?xml version="1.0" encoding="utf-8"?>' + xml_sellado
-		
-		xml_base64 = base64.encodestring(xml_sellado)
+
+		xml_base64 = base64.b64encode(xml_sellado)
 
 		#xml,UUID,fecha,sello,certificado, version = self.timbrar(xml_base64)
-		xml = self.timbrar(xml_base64)
+		xml = self.timbrar(xml_base64, serie_folio[0] + serie_folio[1])
 
 		timbre_fiscal = self.extract_timbre_info(xml)
 
@@ -242,11 +251,12 @@ class account_invoice(models.Model):
 
 		UUID = timbre_fiscal.attrib['UUID']
 		fecha = timbre_fiscal.attrib['FechaTimbrado']
-		sello = timbre_fiscal.attrib['selloSAT']
-		certificado = timbre_fiscal.attrib['noCertificadoSAT']
-		version = timbre_fiscal.attrib['version']
+		sello = timbre_fiscal.attrib['SelloSAT']
+		rfcpac = timbre_fiscal.attrib['RfcProvCertif']
+		certificado = timbre_fiscal.attrib['NoCertificadoSAT']
+		version = timbre_fiscal.attrib['Version']
 
-		cadena_timbrada = self.get_cadena(timbre_fiscal, 'cadenaoriginal_TFD_1_0.xslt')
+		cadena_timbrada = self.get_cadena(timbre_fiscal, 'cadenaoriginal_TFD_1_1.xslt')
 		
 		name = invoice.company_id.vat[2:5] + "%010d" % (int(serie_folio[1]),)
 		
@@ -268,10 +278,11 @@ class account_invoice(models.Model):
 			'facturada': True,
 			'factura_xml': factura_xml.id,
 			'factura_moneda' : moneda,
-			'factura_formapago' : 'PAGO EN UNA SOLA EXHIBICION',
+			'factura_formapago' : pay_method_id,
 			'factura_uuid' : UUID,
 			'factura_fecemi' : fecha,
 			'factura_sellosat' : sello,
+			'factura_rfcpac' : rfcpac,
 			'factura_certificado' : certificado,
 			'factura_nocertificado': no_certificado,
 			'factura_sello' : sello_sella,

@@ -26,6 +26,7 @@
                             <field name="factura_uuid" />
                             <field name="factura_fecemi" />
                             <field name="factura_sellosat" />
+                            <field name="factura_rfcpac" />
                             <field name="factura_certificado" />
                             <field name="factura_nocertificado" />
                             <field name="factura_sello" />

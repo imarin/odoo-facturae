@@ -37,11 +37,6 @@ msgid "Description"
 msgstr ""
 
 #. module: l10n_mx_payment_method
-#: field:account.invoice,acc_payment:0
-msgid "Account Number"
-msgstr ""
-
-#. module: l10n_mx_payment_method
 #: help:account.invoice,pay_method_id:0
 msgid ""
 "Indicates the way it was paid or will be paid the invoice,                "
@@ -57,14 +52,6 @@ msgid ""
 "where the options could be: check, bank transfer, reservoir in               "
 "  account bank, credit card, cash etc. If not know as will be                "
 " paid the invoice, leave empty and the XML show “Unidentified”."
-msgstr ""
-
-#. module: l10n_mx_payment_method
-#: help:account.invoice,acc_payment:0
-msgid ""
-"Is the account with which the client pays the invoice,                 if "
-"not know which account will used for pay leave empty and                 the "
-"XML will show \"“Unidentified”\"."
 msgstr ""
 
 #. module: l10n_mx_payment_method

@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <field name="property_payment_term_id" position="before">
                     <field name="pay_method_id" colspan="2"/>
-                    <field name="acc_payment" colspan="2" domain="[('partner_id', '=', id)]" context="{'default_partner_id' : id }"/>
+                    <field name="pay_metodopago_id" colspan="2"/>
                 </field>
             </field>
         </record>

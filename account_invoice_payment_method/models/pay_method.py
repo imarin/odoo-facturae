@@ -29,5 +29,5 @@ from openerp import models, fields
 class PayMethod(models.Model):
     _name = 'l10n_mx.pay.method'
 
-    name = fields.Char(string="Método de Pago", required=True)
+    name = fields.Char(string="Forma Pago", required=True)
     code = fields.Char(string="Clave", required=True)

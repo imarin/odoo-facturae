@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="product_claveunidad_E48" model="l10n_mx.product.claveunidad">
+            <field name="code">E48</field>
+            <field name="name">Unidad de servicio</field>
+            <field name="description">Unidad de conteo que define el número de unidades de servicio (unidad de servicio: definido período / propiedad / centro / utilidad de alimentación).</field>
+        </record>
+    </data>
+</openerp>
+
+		

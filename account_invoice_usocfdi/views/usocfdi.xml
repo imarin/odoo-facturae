@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_partner_usocfdi_form" model="ir.ui.view">
+            <field name="name">view.l10n_mx.invoice.usocfdi.form</field>
+            <field name="model">l10n_mx.invoice.usocfdi</field>
+            <field name="arch" type="xml">
+                <form string="Uso CFDI">
+                    <div>
+                        <label for="code"/>
+                        <field name="code"/>
+                    </div>
+                    <div>
+                        <label for="name"/>
+                        <field name="name"/>
+                    </div>
+                    <div>
+                        <label for="aplica_fisica"/>
+                        <field name="aplica_fisica"/>
+                    </div>
+                    <div>
+                        <label for="aplica_moral"/>
+                        <field name="aplica_moral"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_partner_usocfdi_tree" model="ir.ui.view">
+            <field name="name">view.l10n_mx.invoice.usocfdi.tree</field>
+            <field name="model">l10n_mx.invoice.usocfdi</field>
+            <field name="arch" type="xml">
+                <tree string="Uso CFDI">
+                    <field name="code" select="1"/>
+                    <field name="name"/>
+                    <field name="aplica_fisica"/>
+                    <field name="aplica_moral"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_partner_usocfdi" model="ir.actions.act_window">
+            <field name="name">Uso CFDI</field>
+            <field name="res_model">l10n_mx.invoice.usocfdi</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="cfd_22_metodopago_pago" name="UsoCFDI" parent='account_invoice_facturae_catalogos.account_invoice_facturae_catalogos_menu' sequence="50"
+            action='action_partner_usocfdi'
+        />
+    </data>
+</openerp>

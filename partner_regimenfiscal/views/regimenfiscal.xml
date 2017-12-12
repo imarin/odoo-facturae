@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_partner_regimenfiscal_form" model="ir.ui.view">
+            <field name="name">view.l10n_mx.partner.regimenfiscal.form</field>
+            <field name="model">l10n_mx.partner.regimenfiscal</field>
+            <field name="arch" type="xml">
+                <form string="Regimen Fiscal">
+                    <div>
+                        <label for="code"/>
+                        <field name="code"/>
+                    </div>
+                    <div>
+                        <label for="name"/>
+                        <field name="name"/>
+                    </div>
+                    <div>
+                        <label for="aplica_fisica"/>
+                        <field name="aplica_fisica"/>
+                    </div>
+                    <div>
+                        <label for="aplica_moral"/>
+                        <field name="aplica_moral"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_partner_regimenfiscal_tree" model="ir.ui.view">
+            <field name="name">view.l10n_mx.partner.regimenfiscal.tree</field>
+            <field name="model">l10n_mx.partner.regimenfiscal</field>
+            <field name="arch" type="xml">
+                <tree string="Regimen Fiscal">
+                    <field name="code" select="1"/>
+                    <field name="name"/>
+                    <field name="aplica_fisica"/>
+                    <field name="aplica_moral"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_partner_regimenfiscal" model="ir.actions.act_window">
+            <field name="name">Regimen Fiscal</field>
+            <field name="res_model">l10n_mx.partner.regimenfiscal</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="cfd_22_metodopago_pago" name="RegimenFiscal" parent='account_invoice_facturae_catalogos.account_invoice_facturae_catalogos_menu' sequence="50"
+            action='action_partner_regimenfiscal'
+        />
+    </data>
+</openerp>

@@ -6,7 +6,10 @@
         'company_facturae_certs',
         'account_invoice_payment_method',
         'partner_facturae_address',
-        'account_invoice_amount_to_text'
+        'partner_regimenfiscal',
+        'account_invoice_amount_to_text',
+        'account_invoice_usocfdi',
+        'product_claves',
     ],
     'author': "X8BIT SA DE CV",
     'website': 'www.x8bit.com',

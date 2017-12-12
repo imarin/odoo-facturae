@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_account_invoice_form_inh_usocfdi_22">
+            <field name="name">view.account.invoice.form.inh.usocfdi_22</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_due']" position="after">
+                    <newline/>
+                    <field name="invoice_usocfdi_id" colspan="2"/>
+                </xpath>
+            </field>
+        </record>
+        
+        
+        <record model="ir.ui.view" id="view_account_invoice_supplier_form_inh_usocfdi_22">
+            <field name="name">view.account.invoice.supplier.form.inh.usocfdi_22</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_due']" position="after">
+                    <newline/>
+                    <field name="invoice_usocfdi_id" colspan="2" />
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

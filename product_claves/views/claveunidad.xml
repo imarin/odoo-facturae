@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_product_claveunidad_form" model="ir.ui.view">
+            <field name="name">view.l10n_mx.product.claveunidad.form</field>
+            <field name="model">l10n_mx.product.claveunidad</field>
+            <field name="arch" type="xml">
+                <form string="Clave Unidad">
+                    <div>
+                        <label for="code"/>
+                        <field name="code"/>
+                    </div>
+                    <div>
+                        <label for="name"/>
+                        <field name="name"/>
+                    </div>
+                    <div>
+                        <label for="description"/>
+                        <field name="description"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_product_claveunidad_tree" model="ir.ui.view">
+            <field name="name">view.l10n_mx.product.claveunidad.tree</field>
+            <field name="model">l10n_mx.product.claveunidad</field>
+            <field name="arch" type="xml">
+                <tree string="Clave Unidad">
+                    <field name="code" select="1"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_product_claveunidad" model="ir.actions.act_window">
+            <field name="name">Clave Unidad</field>
+            <field name="res_model">l10n_mx.product.claveunidad</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="cfd_22_claveunidad" name="ClaveUnidad" parent='account_invoice_facturae_catalogos.account_invoice_facturae_catalogos_menu' sequence="50"
+            action='action_product_claveunidad'
+        />
+    </data>
+</openerp>

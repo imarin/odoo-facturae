@@ -5,10 +5,15 @@
             <field name="name">view.l10n_mx.pay.method.form</field>
             <field name="model">l10n_mx.pay.method</field>
             <field name="arch" type="xml">
-                <form string="Payment Method">
-                    <field name="code"/>
-                    <field name="name"/>
-
+                <form string="Forma Pago">
+                    <div>
+                        <label for="code"/>
+                        <field name="code"/>
+                    </div>
+                    <div>
+                        <label for="name"/>
+                        <field name="name"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -17,7 +22,7 @@
             <field name="name">view.l10n_mx.pay.method.tree</field>
             <field name="model">l10n_mx.pay.method</field>
             <field name="arch" type="xml">
-                <tree string="Payment Method">
+                <tree string="Forma Pago">
                     <field name="code" select="1"/>
                     <field name="name"/>
                 </tree>
@@ -25,14 +30,14 @@
         </record>
 
         <record id="action_pay_method" model="ir.actions.act_window">
-            <field name="name">Payment Method</field>
+            <field name="name">Forma Pago</field>
             <field name="res_model">l10n_mx.pay.method</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
         <menuitem
-            id="cfd_22_metodos_pago" name="Payment Method" parent='base.menu_config_address_book' sequence="50"
+            id="cfd_22_formapago_pago" name="FormaPago" parent='account_invoice_facturae_catalogos.account_invoice_facturae_catalogos_menu' sequence="50"
             action='action_pay_method'
         />
     </data>

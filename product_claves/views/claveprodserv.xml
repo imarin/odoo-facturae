@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_product_claveprodserv_form" model="ir.ui.view">
+            <field name="name">view.l10n_mx.product.claveprodserv.form</field>
+            <field name="model">l10n_mx.product.claveprodserv</field>
+            <field name="arch" type="xml">
+                <form string="Clave Prod Serv">
+                    <div>
+                        <label for="code"/>
+                        <field name="code"/>
+                    </div>
+                    <div>
+                        <label for="name"/>
+                        <field name="name"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_product_claveprodserv_tree" model="ir.ui.view">
+            <field name="name">view.l10n_mx.product.claveprodserv.tree</field>
+            <field name="model">l10n_mx.product.claveprodserv</field>
+            <field name="arch" type="xml">
+                <tree string="Clave Prod Serv">
+                    <field name="code" select="1"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_product_claveprodserv" model="ir.actions.act_window">
+            <field name="name">Clave Prod Serv</field>
+            <field name="res_model">l10n_mx.product.claveprodserv</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="cfd_22_claveprodserv" name="ClaveProdServ" parent='account_invoice_facturae_catalogos.account_invoice_facturae_catalogos_menu' sequence="50"
+            action='action_product_claveprodserv'
+        />
+    </data>
+</openerp>

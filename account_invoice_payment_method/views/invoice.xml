@@ -10,7 +10,7 @@
                 <xpath expr="//field[@name='fiscal_position_id']" position="after">
                     <newline/>
                     <field name="pay_method_id" colspan="2"/>
-                    <field name="acc_payment" colspan="2" domain = "[('partner_id', '=', partner_id)]"/>
+                    <field name="pay_metodopago_id" colspan="2"/>
                 </xpath>
             </field>
         </record>
@@ -24,7 +24,7 @@
                 <xpath expr="//field[@name='fiscal_position_id']" position="after">
                     <newline/>
                     <field name="pay_method_id" colspan="2" />
-                    <field name="acc_payment" colspan="2" domain = "[('partner_id', '=', partner_id)]"/>
+                    <field name="pay_metodopago_id" colspan="2" />
                 </xpath>
             </field>
         </record>
